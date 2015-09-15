@@ -5,7 +5,8 @@
 # Find the thirteen adjacent digits in the 1000-digit number that have the 
 # greatest product. What is the value of this product?
 
-num = int("""
+# we are going to leave num as a string to step through the digits by positon
+num = ("""
 73167176531330624919225119674426574742355349194934
 96983520312774506326239578318016984801869478851843
 85861560789112949495459501737958331952853208805511
@@ -27,3 +28,43 @@ num = int("""
 05886116467109405077541002256983155200055935729725
 71636269561882670428252483600823257530420752963450""".replace("\n",""))
 
+import time
+tic=time.time()
+
+group = 13
+large_num=0
+
+for i in range(len(num)-group):
+    a = num[i:i+group]
+
+    num_prod = 1
+    for n in a:
+        num_prod = num_prod*int(n)
+#    print i,a,num_prod
+    
+    if num_prod > large_num:
+        large_num =  num_prod
+        print 'the largest number so far is',large_num
+        print 'at iteration i',i
+
+toc=time.time()
+print (toc-tic)*1e6,'us'
+
+
+# an alternate solution using lambda functions! 
+# comparing the times this is more efficient
+tic=time.time()
+
+large_num=0
+for i in range(len(num)-group):
+    a = num[i:i+group]
+    num_prod = reduce(lambda x,y:x*y, map(int,a)) 
+    #this creates a list of integers via the map fcn
+    #then multiplies the uses reduce to find the product
+    #see here for more info: http://www.python-course.eu/lambda.php
+    if num_prod > large_num:
+        large_num = num_prod
+        print 'this is a big ass product!',large_num
+
+toc=time.time()
+print (toc-tic)*1e6,'us'
